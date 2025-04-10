@@ -1,7 +1,11 @@
 import { initializeApp } from "firebase/app";
 import {
-    getFirestore, collection, getDocs, addDoc, deleteDoc, doc
+    getFirestore, collection, onSnapshot,
+    getDocs, addDoc, deleteDoc, doc
 } from "firebase/firestore";
+import {
+    getAuth
+} from "firebase/auth"
 
 const firebaseConfig = {
     apiKey: "AIzaSyAM_JiTNkMKw-OUs49q0knOxEyaw6ZEfQ4",
@@ -17,22 +21,19 @@ initializeApp(firebaseConfig);
 
 // init services
 const db = getFirestore();
+const auth = getAuth()
 
 // collection reference
 const colRef = collection(db, "books");
 
 // get collection data
-
-
-getDocs(colRef)
-    .then(snapshot => {
-        let books = [];
-        snapshot.docs.forEach(doc => {
-            books.push({ ...doc.data(), id: doc.id })
-        })
-        console.log(books)
+onSnapshot(colRef, (snapshot) => {
+    let books = [];
+    snapshot.docs.forEach(doc => {
+        books.push({ ...doc.data(), id: doc.id })
     })
-    .catch(() => console.log(err.message))
+    console.log(books)
+})
 
 // add item
 const addForm = document.querySelector(".add");
