@@ -1,7 +1,9 @@
 import { initializeApp } from "firebase/app";
 import {
     getFirestore, collection, onSnapshot,
-    getDocs, addDoc, deleteDoc, doc
+    getDocs, addDoc, deleteDoc, doc,
+    query, where,
+    orderBy, serverTimestamp
 } from "firebase/firestore";
 import {
     getAuth
@@ -26,8 +28,11 @@ const auth = getAuth()
 // collection reference
 const colRef = collection(db, "books");
 
+// queries
+const q = query(colRef, orderBy("createdAt")) // (optional) 2°: where("author", "==", "rodrigo patto")
+
 // get collection data
-onSnapshot(colRef, (snapshot) => {
+onSnapshot(q, (snapshot) => {
     let books = [];
     snapshot.docs.forEach(doc => {
         books.push({ ...doc.data(), id: doc.id })
@@ -42,7 +47,8 @@ addForm.addEventListener("submit", e => {
 
     addDoc(colRef, {
         title: addForm.title.value.trim(),
-        author: addForm.author.value.trim()
+        author: addForm.author.value.trim(),
+        createdAt: serverTimestamp()
     })
         .then(() => addForm.reset())
 })
