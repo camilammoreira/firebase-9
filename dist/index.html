@@ -9,7 +9,7 @@
 
 <body>
 
-    <form class="add">
+    <form class="add from">
         <h2>Add book</h2>
         <input type="text" id="title" placeholder="Title" required>
         <input type="text" id="author" placeholder="Author" required>
@@ -20,6 +20,20 @@
         <input type="text" id="id" placeholder="Item ID">
         <button type="submit">Delete</button>
     </form>
+    <form class="update">
+        <h2>Update book</h2>
+        <input type="text" id="updateFormId" placeholder="Item ID">
+        <input type="text" id="newTitle" placeholder="New Title">
+        <input type="text" id="newAuthor" placeholder="New Author">
+        <button type="submit">Update</button>
+    </form>
+    <form class="signup">
+        <h2>Sign Up</h2>
+        <input type="email" id="email" placeholder="E-mail" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <button type="submit">Sign Up</button>
+    </form>
+
     <script src="./assets/bundle.js"></script>
 </body>
 

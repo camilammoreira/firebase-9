@@ -1,12 +1,12 @@
 import { initializeApp } from "firebase/app";
 import {
     getFirestore, collection, onSnapshot,
-    getDocs, addDoc, deleteDoc, doc,
+    getDocs, addDoc, deleteDoc, updateDoc, doc,
     query, where,
     orderBy, serverTimestamp
 } from "firebase/firestore";
 import {
-    getAuth
+    getAuth, createUserWithEmailAndPassword
 } from "firebase/auth"
 
 const firebaseConfig = {
@@ -23,7 +23,7 @@ initializeApp(firebaseConfig);
 
 // init services
 const db = getFirestore();
-const auth = getAuth()
+const auth = getAuth();
 
 // collection reference
 const colRef = collection(db, "books");
@@ -61,4 +61,37 @@ delForm.addEventListener("submit", e => {
     const docRef = doc(db, "books", delForm.id.value.trim());
     deleteDoc(docRef)
         .then(() => delForm.reset())
+})
+
+// update item
+const updateForm = document.querySelector(".update");
+updateForm.addEventListener("submit", e => {
+    e.preventDefault();
+
+    const docRef = doc(db, "books", updateForm.updateFormId.value)
+
+    updateDoc(docRef, {
+        title: updateForm.newTitle.value,
+        author: updateForm.newAuthor.value
+    }).then(() => {
+        updateForm.reset();
+    }).catch(err => console.log(err.message))
+})
+
+// sign up
+const signupForm = document.querySelector(".signup");
+signupForm.addEventListener("submit", e => {
+    e.preventDefault();
+
+    const email = signupForm.email.value;
+    const password = signupForm.password.value;
+
+    createUserWithEmailAndPassword(auth, email, password)
+        .then(cred => {
+            console.log("user created:", cred.user);
+            signupForm.reset();
+        })
+        .catch(err => {
+            console.log(err.message);
+        })
 })
